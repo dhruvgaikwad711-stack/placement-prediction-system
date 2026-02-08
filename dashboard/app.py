@@ -16,7 +16,7 @@ st.set_page_config(
 # -----------------------------
 # Title
 # -----------------------------
-st.title("🎓 Student Placement Prediction System")
+st.title(" Student Placement Prediction System")
 st.markdown(
 """
 This dashboard analyzes student placement data and predicts  
@@ -52,13 +52,13 @@ st.divider()
 # -----------------------------
 # Dataset Preview
 # -----------------------------
-st.subheader("📊 Dataset Preview")
+st.subheader(" Dataset Preview")
 st.dataframe(df.head())
 
 # -----------------------------
 # Graphs Section
 # -----------------------------
-st.subheader("📈 Placement Analysis")
+st.subheader(" Placement Analysis")
 
 col3, col4 = st.columns(2)
 
@@ -82,7 +82,7 @@ st.divider()
 # -----------------------------
 # Prediction Section
 # -----------------------------
-st.subheader("🔮 Placement Prediction")
+st.subheader(" Placement Prediction")
 
 model = pickle.load(
     open("models/placement_model.pkl","rb")
@@ -114,6 +114,6 @@ if st.button("Predict Placement"):
     prediction = model.predict(input_data)
 
     if prediction[0] == 1:
-        st.success("✅ Student will be Placed")
+        st.success(" Student will be Placed")
     else:
-        st.error("❌ Student will NOT be Placed")
+        st.error(" Student will NOT be Placed")
