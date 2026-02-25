@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS students (
 """)
 
 # Number of records
-n = 500
+n = 2000
 
 data = []
 
