@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
-
+from preprocess import X_train, X_test, y_train, y_test
 # -----------------------------
 # Connect to SQL Database
 # -----------------------------
@@ -49,6 +49,13 @@ preds = model.predict(X_test)
 acc = accuracy_score(y_test, preds)
 
 print("Model Accuracy:", acc)
+from sklearn.metrics import accuracy_score
+
+y_pred = model.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Accuracy:", accuracy)
 
 # -----------------------------
 # Save Model

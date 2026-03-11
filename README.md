@@ -26,8 +26,8 @@ This project predicts whether a student will be placed based on academic and ski
 
 ## How to Run
 
-1. Generate data:
+1. Generate data: python scripts\data_generator.py
 
-2. Train model:
+2. Train model: python scripts\train_model.py
 
-3. Run dashboard:
+3. Run dashboard: python -m streamlit run dashboard\app.py

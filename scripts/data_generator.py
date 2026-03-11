@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS students (
 """)
 
 # Number of records
-n = 2000
+n = 10000
 
 data = []
 
@@ -32,10 +32,17 @@ for i in range(n):
     aptitude_score = random.randint(30, 95)
     communication_skills = random.randint(4, 10)
 
-    if cgpa > 7 and aptitude_score > 60 and communication_skills > 6:
+    # create score for placement decision
+    score = cgpa + internships + projects + (aptitude_score / 20) + communication_skills
+
+    if score > 18:
         placement = "Placed"
     else:
         placement = "Not Placed"
+
+    # add randomness to reduce overfitting
+    if random.random() > 0.90:
+        placement = "Placed" if placement == "Not Placed" else "Not Placed"
 
     data.append((
         student_id,
