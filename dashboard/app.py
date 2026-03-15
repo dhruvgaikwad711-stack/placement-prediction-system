@@ -35,6 +35,14 @@ df = pd.read_sql(
 )
 
 conn.close()
+# -----------------------------
+# Sidebar Filters
+# -----------------------------
+st.sidebar.header("Filter Data")
+
+min_cgpa = st.sidebar.slider("Minimum CGPA", 5.0, 10.0, 5.0)
+
+filtered_df = df[df["cgpa"] >= min_cgpa]
 
 # -----------------------------
 # Metrics
@@ -53,7 +61,7 @@ st.divider()
 # Dataset Preview
 # -----------------------------
 st.subheader(" Dataset Preview")
-st.dataframe(df.head())
+st.dataframe(filtered_df.head())
 
 # -----------------------------
 # Graphs Section
@@ -61,6 +69,20 @@ st.dataframe(df.head())
 st.subheader(" Placement Analysis")
 
 col3, col4 = st.columns(2)
+st.subheader("CGPA Distribution")
+
+fig3, ax3 = plt.subplots()
+ax3.hist(df["cgpa"], bins=20)
+
+ax3.set_xlabel("CGPA")
+ax3.set_ylabel("Students")
+
+st.pyplot(fig3)
+st.subheader("Key Insights")
+
+st.write("Average CGPA:", round(df["cgpa"].mean(),2))
+st.write("Average Aptitude Score:", round(df["aptitude_score"].mean(),2))
+st.write("Average Communication Skills:", round(df["communication_skills"].mean(),2))
 
 # Pie Chart
 with col3:
@@ -78,6 +100,16 @@ with col4:
     st.pyplot(fig2)
 
 st.divider()
+st.subheader("Internships vs Placement")
+
+fig4, ax4 = plt.subplots()
+
+df.groupby("internships")["placement"].count().plot.bar(ax=ax4)
+
+ax4.set_xlabel("Internships")
+ax4.set_ylabel("Students")
+
+st.pyplot(fig4)
 
 # -----------------------------
 # Prediction Section
@@ -103,7 +135,7 @@ with col6:
 
 if st.button("Predict Placement"):
 
-    input_data = np.array([[
+    input_data = np.array([[ 
         cgpa,
         internships,
         projects,
@@ -113,7 +145,18 @@ if st.button("Predict Placement"):
 
     prediction = model.predict(input_data)
 
+    st.subheader("Prediction Result")
+
     if prediction[0] == 1:
-        st.success(" Student will be Placed")
+
+        st.markdown(
+            "<h2 style='color:green;text-align:center;'>Student is likely to be PLACED</h2>",
+            unsafe_allow_html=True
+        )
+
     else:
-        st.error(" Student will NOT be Placed")
+
+        st.markdown(
+            "<h2 style='color:red;text-align:center;'>Student is NOT likely to be placed</h2>",
+            unsafe_allow_html=True
+        )

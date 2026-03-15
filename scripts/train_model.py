@@ -1,21 +1,20 @@
 import pandas as pd
 import sqlite3
 import pickle
+
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
-from preprocess import X_train, X_test, y_train, y_test
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
 # -----------------------------
 # Connect to SQL Database
 # -----------------------------
 conn = sqlite3.connect("database/placement.db")
 
 # Fetch data from SQL table
-df = pd.read_sql(
-    "SELECT * FROM students",
-    conn
-)
+df = pd.read_sql("SELECT * FROM students", conn)
 
 conn.close()
 
@@ -36,33 +35,49 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# -----------------------------
-# Train Model
-# -----------------------------
-model = RandomForestClassifier()
-model.fit(X_train, y_train)
+print("Training data:", X_train.shape)
+print("Testing data:", X_test.shape)
 
 # -----------------------------
-# Evaluate Model
+# Train Models
 # -----------------------------
-preds = model.predict(X_test)
-acc = accuracy_score(y_test, preds)
 
-print("Model Accuracy:", acc)
-from sklearn.metrics import accuracy_score
+rf_model = RandomForestClassifier()
+lr_model = LogisticRegression(max_iter=1000)
 
-y_pred = model.predict(X_test)
-
-accuracy = accuracy_score(y_test, y_pred)
-
-print("Accuracy:", accuracy)
+rf_model.fit(X_train, y_train)
+lr_model.fit(X_train, y_train)
 
 # -----------------------------
-# Save Model
+# Predictions
 # -----------------------------
+
+rf_pred = rf_model.predict(X_test)
+lr_pred = lr_model.predict(X_test)
+
+# -----------------------------
+# Evaluation Metrics
+# -----------------------------
+
+print("\nRandom Forest Results")
+print("Accuracy:", accuracy_score(y_test, rf_pred))
+print("Precision:", precision_score(y_test, rf_pred))
+print("Recall:", recall_score(y_test, rf_pred))
+print("F1 Score:", f1_score(y_test, rf_pred))
+
+print("\nLogistic Regression Results")
+print("Accuracy:", accuracy_score(y_test, lr_pred))
+print("Precision:", precision_score(y_test, lr_pred))
+print("Recall:", recall_score(y_test, lr_pred))
+print("F1 Score:", f1_score(y_test, lr_pred))
+
+# -----------------------------
+# Save Best Model (Random Forest)
+# -----------------------------
+
 pickle.dump(
-    model,
+    rf_model,
     open("models/placement_model.pkl","wb")
 )
 
-print("Model trained & saved from SQL data!")
+print("\nModel trained & saved successfully!")
