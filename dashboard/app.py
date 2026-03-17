@@ -85,220 +85,222 @@ col3.metric(
 st.divider()
 
 # -----------------------------
-# Dataset Preview
+# Tabs
 # -----------------------------
-st.subheader("Dataset Explorer")
+tab1, tab2, tab3 = st.tabs([
+    "Data Analysis",
+    "Model Insights",
+    "Prediction"
+])
 
-st.write("Filtered Dataset Size:", len(filtered_df))
+# =========================================================
+# DATA ANALYSIS TAB
+# =========================================================
 
-sort_column = st.selectbox(
-    "Sort Dataset By",
-    ["cgpa","internships","aptitude_score"]
-)
+with tab1:
 
-sorted_df = filtered_df.sort_values(
-    by=sort_column,
-    ascending=False
-)
+    st.subheader("Dataset Explorer")
 
-st.dataframe(sorted_df.head(10))
+    st.write("Filtered Dataset Size:", len(filtered_df))
 
-st.divider()
-
-# -----------------------------
-# Placement Analysis
-# -----------------------------
-st.subheader("Placement Analysis")
-
-col4, col5 = st.columns(2)
-
-# Placement distribution
-with col4:
-
-    fig1, ax1 = plt.subplots()
-
-    filtered_df["placement"].value_counts().plot.bar(
-        color=["#4CAF50","#FF5252"],
-        ax=ax1
+    sort_column = st.selectbox(
+        "Sort Dataset By",
+        ["cgpa","internships","aptitude_score"]
     )
 
-    ax1.set_ylabel("Students")
+    sorted_df = filtered_df.sort_values(
+        by=sort_column,
+        ascending=False
+    )
 
-    st.pyplot(fig1)
+    st.dataframe(sorted_df.head(10))
 
-# CGPA vs placement
-with col5:
+    st.divider()
 
-    fig2, ax2 = plt.subplots()
+    st.subheader("Placement Analysis")
 
-    filtered_df.boxplot(column="cgpa", by="placement", ax=ax2)
+    col4, col5 = st.columns(2)
 
-    st.pyplot(fig2)
+    with col4:
 
-st.divider()
+        fig1, ax1 = plt.subplots()
 
-# -----------------------------
-# Feature Analysis
-# -----------------------------
-col6, col7 = st.columns(2)
+        filtered_df["placement"].value_counts().plot.bar(
+            color=["#4CAF50","#FF5252"],
+            ax=ax1
+        )
 
-with col6:
+        ax1.set_ylabel("Students")
 
-    st.subheader("CGPA Distribution")
+        st.pyplot(fig1)
 
-    fig3, ax3 = plt.subplots()
+    with col5:
 
-    ax3.hist(filtered_df["cgpa"], bins=20)
+        fig2, ax2 = plt.subplots()
 
-    st.pyplot(fig3)
+        filtered_df.boxplot(column="cgpa", by="placement", ax=ax2)
 
-with col7:
+        st.pyplot(fig2)
 
-    st.subheader("Internships vs Students")
+    st.divider()
 
-    fig4, ax4 = plt.subplots()
+    col6, col7 = st.columns(2)
 
-    filtered_df.groupby("internships")["placement"].count().plot.bar(ax=ax4)
+    with col6:
 
-    st.pyplot(fig4)
+        st.subheader("CGPA Distribution")
 
-st.divider()
+        fig3, ax3 = plt.subplots()
 
-# -----------------------------
-# Key Insights
-# -----------------------------
-st.subheader("Key Insights")
+        ax3.hist(filtered_df["cgpa"], bins=20)
 
-st.write("Average CGPA:", round(filtered_df["cgpa"].mean(),2))
+        st.pyplot(fig3)
 
-st.write("Average Aptitude Score:", round(filtered_df["aptitude_score"].mean(),2))
+    with col7:
 
-st.write("Average Communication Skills:", round(filtered_df["communication_skills"].mean(),2))
+        st.subheader("Internships vs Students")
 
-st.divider()
+        fig4, ax4 = plt.subplots()
 
-# -----------------------------
-# Load Model
-# -----------------------------
-model = pickle.load(
-    open("models/placement_model.pkl","rb")
-)
+        filtered_df.groupby("internships")["placement"].count().plot.bar(ax=ax4)
 
-# -----------------------------
-# Feature Importance
-# -----------------------------
-st.subheader("Feature Importance")
+        st.pyplot(fig4)
 
-importance = model.feature_importances_
+    st.divider()
 
-features = ["cgpa","internships","projects","aptitude_score","communication_skills"]
+    st.subheader("CGPA vs Aptitude Score")
 
-importance_df = pd.DataFrame({
-    "Feature":features,
-    "Importance":importance
-})
+    fig_scatter, ax_scatter = plt.subplots()
 
-importance_df = importance_df.sort_values(
-    by="Importance",
-    ascending=False
-)
+    # sample data so graph clean rahe
+    sample_df = filtered_df.sample(min(2000, len(filtered_df)))
 
-fig_imp, ax_imp = plt.subplots()
+    ax_scatter.scatter(
+        sample_df["cgpa"],
+        sample_df["aptitude_score"],
+        alpha=0.5
+    )
 
-ax_imp.barh(
-    importance_df["Feature"],
-    importance_df["Importance"],
-    color="#2196F3"
-)
+    ax_scatter.set_xlabel("CGPA")
+    ax_scatter.set_ylabel("Aptitude Score")
 
-st.pyplot(fig_imp)
+    st.pyplot(fig_scatter)
 
-st.divider()
+# =========================================================
+# MODEL INSIGHTS TAB
+# =========================================================
 
-# -----------------------------
-# Model Comparison
-# -----------------------------
-st.subheader("Model Comparison")
+with tab2:
 
-X = df.drop(["student_id","placement"], axis=1)
+    model = pickle.load(
+        open("models/placement_model.pkl","rb")
+    )
 
-y = df["placement"].map({"Not Placed":0,"Placed":1})
+    st.subheader("Feature Importance")
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X,y,test_size=0.2,random_state=42
-)
+    importance = model.feature_importances_
 
-# Logistic regression
-log_model = LogisticRegression()
+    features = ["cgpa","internships","projects","aptitude_score","communication_skills"]
 
-log_model.fit(X_train,y_train)
+    importance_df = pd.DataFrame({
+        "Feature":features,
+        "Importance":importance
+    })
 
-log_preds = log_model.predict(X_test)
+    importance_df = importance_df.sort_values(
+        by="Importance",
+        ascending=False
+    )
 
-log_acc = accuracy_score(y_test,log_preds)
+    fig_imp, ax_imp = plt.subplots()
 
-# Random forest accuracy
-rf_preds = model.predict(X_test)
+    ax_imp.barh(
+        importance_df["Feature"],
+        importance_df["Importance"],
+        color="#2196F3"
+    )
 
-rf_acc = accuracy_score(y_test,rf_preds)
+    st.pyplot(fig_imp)
 
-models = ["Random Forest","Logistic Regression"]
+    st.divider()
 
-scores = [rf_acc,log_acc]
+    st.subheader("Model Comparison")
 
-fig_cmp, ax_cmp = plt.subplots()
+    X = df.drop(["student_id","placement"], axis=1)
 
-ax_cmp.bar(models,scores,color=["#4CAF50","#FF9800"])
+    y = df["placement"].map({"Not Placed":0,"Placed":1})
 
-ax_cmp.set_ylabel("Accuracy")
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,y,test_size=0.2,random_state=42
+    )
 
-st.pyplot(fig_cmp)
+    log_model = LogisticRegression()
 
-st.divider()
+    log_model.fit(X_train,y_train)
 
-# -----------------------------
-# Prediction Section
-# -----------------------------
-st.subheader("Placement Prediction")
+    log_preds = log_model.predict(X_test)
 
-col8, col9 = st.columns(2)
+    log_acc = accuracy_score(y_test,log_preds)
 
-with col8:
-    cgpa = st.slider("CGPA", 5.0, 10.0, 7.0)
-    internships = st.slider("Internships", 0, 3, 1)
-    projects = st.slider("Projects", 1, 5, 2)
+    rf_preds = model.predict(X_test)
 
-with col9:
-    aptitude = st.slider("Aptitude Score", 30, 100, 60)
-    communication = st.slider("Communication Skills", 1, 10, 5)
+    rf_acc = accuracy_score(y_test,rf_preds)
 
-if st.button("Predict Placement"):
+    models = ["Random Forest","Logistic Regression"]
 
-    input_data = np.array([[ 
-        cgpa,
-        internships,
-        projects,
-        aptitude,
-        communication
-    ]])
+    scores = [rf_acc,log_acc]
 
-    # Model prediction
-    prediction = model.predict(input_data)
+    fig_cmp, ax_cmp = plt.subplots()
 
-    # Prediction probability
-    probability = model.predict_proba(input_data)
+    ax_cmp.bar(models,scores,color=["#4CAF50","#FF9800"])
 
-    placement_prob = probability[0][1] * 100
+    ax_cmp.set_ylabel("Accuracy")
 
-    st.subheader("Prediction Result")
+    st.pyplot(fig_cmp)
 
-    st.write("Placement Probability:", round(placement_prob,2), "%")
+# =========================================================
+# PREDICTION TAB
+# =========================================================
 
-    # Progress bar visualization
-    st.progress(int(placement_prob))
+with tab3:
 
-    if prediction[0] == 1:
-        st.success("Student is likely to be PLACED")
+    st.subheader("Placement Prediction")
 
-    else:
-        st.error("Student is NOT likely to be placed")
+    col8, col9 = st.columns(2)
+
+    with col8:
+        cgpa = st.slider("CGPA", 5.0, 10.0, 7.0)
+        internships = st.slider("Internships", 0, 3, 1)
+        projects = st.slider("Projects", 1, 5, 2)
+
+    with col9:
+        aptitude = st.slider("Aptitude Score", 30, 100, 60)
+        communication = st.slider("Communication Skills", 1, 10, 5)
+
+    if st.button("Predict Placement"):
+
+        input_data = np.array([[ 
+            cgpa,
+            internships,
+            projects,
+            aptitude,
+            communication
+        ]])
+
+        prediction = model.predict(input_data)
+
+        probability = model.predict_proba(input_data)
+
+        placement_prob = probability[0][1] * 100
+
+        st.subheader("Prediction Result")
+
+        st.write("Placement Probability:", round(placement_prob,2), "%")
+
+        st.progress(int(placement_prob))
+
+        if prediction[0] == 1:
+            st.success("Student is likely to be PLACED")
+
+        else:
+            st.error("Student is NOT likely to be placed")
