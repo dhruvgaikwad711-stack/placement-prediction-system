@@ -28,7 +28,6 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
 
-/* ── Root Variables ───────────────────────── */
 :root {
     --bg-primary:    #080B12;
     --bg-secondary:  #0F1623;
@@ -44,18 +43,15 @@ st.markdown("""
     --shadow:        0 8px 32px rgba(0,0,0,0.4);
 }
 
-/* ── Global Reset ─────────────────────────── */
 html, body, [class*="css"] {
     font-family: 'Space Grotesk', sans-serif !important;
     background-color: var(--bg-primary) !important;
     color: var(--text-primary) !important;
 }
 
-/* ── Hide Streamlit chrome ────────────────── */
 #MainMenu, footer, header { visibility: hidden; }
 .block-container { padding: 2rem 2.5rem 4rem !important; max-width: 1400px !important; }
 
-/* ── Sidebar ──────────────────────────────── */
 section[data-testid="stSidebar"] {
     background: var(--bg-secondary) !important;
     border-right: 1px solid var(--border) !important;
@@ -63,7 +59,6 @@ section[data-testid="stSidebar"] {
 section[data-testid="stSidebar"] * { color: var(--text-primary) !important; }
 section[data-testid="stSidebar"] .stSlider > div > div { background: var(--accent-1) !important; }
 
-/* ── Metric Cards ─────────────────────────── */
 [data-testid="stMetric"] {
     background: var(--bg-card) !important;
     border: 1px solid var(--border) !important;
@@ -79,7 +74,6 @@ section[data-testid="stSidebar"] .stSlider > div > div { background: var(--accen
 [data-testid="stMetricValue"] { color: var(--text-primary) !important; font-size: 2rem !important; font-weight: 700 !important; }
 [data-testid="stMetricDelta"] { font-size: 0.78rem !important; }
 
-/* ── Tabs ─────────────────────────────────── */
 .stTabs [data-baseweb="tab-list"] {
     background: var(--bg-secondary) !important;
     border-radius: 12px !important;
@@ -101,14 +95,12 @@ section[data-testid="stSidebar"] .stSlider > div > div { background: var(--accen
     color: white !important;
 }
 
-/* ── DataFrame ────────────────────────────── */
 [data-testid="stDataFrame"] {
     border-radius: 12px !important;
     overflow: hidden !important;
     border: 1px solid var(--border) !important;
 }
 
-/* ── Buttons ──────────────────────────────── */
 .stButton > button {
     background: linear-gradient(135deg, var(--accent-1), var(--accent-4)) !important;
     color: white !important;
@@ -124,23 +116,20 @@ section[data-testid="stSidebar"] .stSlider > div > div { background: var(--accen
 }
 .stButton > button:hover { opacity: 0.88 !important; transform: translateY(-1px) !important; }
 
-/* ── Alerts ───────────────────────────────── */
 .stSuccess { background: rgba(0,212,170,0.1) !important; border-left: 4px solid var(--accent-2) !important; border-radius: 0 10px 10px 0 !important; }
 .stError   { background: rgba(247,114,79,0.1) !important; border-left: 4px solid var(--accent-3) !important; border-radius: 0 10px 10px 0 !important; }
 .stInfo    { background: rgba(79,142,247,0.1) !important; border-left: 4px solid var(--accent-1) !important; border-radius: 0 10px 10px 0 !important; }
 .stWarning { background: rgba(181,123,255,0.1) !important; border-left: 4px solid var(--accent-4) !important; border-radius: 0 10px 10px 0 !important; }
 
-/* ── Progress bar ─────────────────────────── */
 .stProgress > div > div { background: linear-gradient(90deg, var(--accent-1), var(--accent-2)) !important; border-radius: 99px !important; }
 .stProgress > div { background: var(--bg-secondary) !important; border-radius: 99px !important; }
 
-/* ── Selectbox / Multiselect ──────────────── */
 [data-baseweb="select"] > div { background: var(--bg-card) !important; border-color: var(--border) !important; border-radius: 10px !important; }
 </style>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# PLOTLY DARK TEMPLATE  (reusable)
+# PLOTLY DARK TEMPLATE
 # ─────────────────────────────────────────────
 PLOTLY_LAYOUT = dict(
     paper_bgcolor="rgba(0,0,0,0)",
@@ -152,8 +141,6 @@ PLOTLY_LAYOUT = dict(
     xaxis=dict(gridcolor="rgba(79,142,247,0.08)", linecolor="rgba(79,142,247,0.15)", tickfont=dict(color="#8A99BB")),
     yaxis=dict(gridcolor="rgba(79,142,247,0.08)", linecolor="rgba(79,142,247,0.15)", tickfont=dict(color="#8A99BB")),
 )
-
-PALETTE = ["#4F8EF7", "#00D4AA", "#F7724F", "#B57BFF", "#F7C84F"]
 
 # ─────────────────────────────────────────────
 # HERO BANNER
@@ -174,7 +161,6 @@ st.markdown("""
   <div style="position:absolute;bottom:-80px;left:30%;width:200px;height:200px;
               background:radial-gradient(circle, rgba(0,212,170,0.10) 0%, transparent 70%);
               border-radius:50%;pointer-events:none;"></div>
-
   <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.6rem;">
     <span style="font-size:2rem;">🎓</span>
     <span style="
@@ -190,7 +176,6 @@ st.markdown("""
         font-family:'Space Grotesk',sans-serif;
     ">ML · v2.0</span>
   </div>
-
   <p style="color:#A0AECF;font-size:0.95rem;margin:0;max-width:600px;line-height:1.6;font-family:'Space Grotesk',sans-serif;">
     Placement Intelligence Platform — Analyze student profiles, explore model insights,
     and predict placement outcomes powered by a trained <strong style="color:#EEF2FF;">Random Forest Classifier</strong>.
@@ -216,7 +201,7 @@ df    = load_data()
 model = load_model()
 
 # ─────────────────────────────────────────────
-# SIDEBAR  – FILTERS
+# SIDEBAR – FILTERS
 # ─────────────────────────────────────────────
 with st.sidebar:
     st.markdown("""
@@ -282,7 +267,6 @@ tab1, tab2, tab3 = st.tabs(["📊  Analytics", "🧠  Model Insights", "🚀  Pr
 # ═══════════════════════════════════════════════════════════
 with tab1:
 
-    # ── Data Preview ──────────────────────────
     st.markdown("#### 📋 Dataset Preview")
     st.dataframe(
         filtered_df.head(10).style.background_gradient(cmap="Blues", subset=["cgpa", "aptitude_score"]),
@@ -291,7 +275,6 @@ with tab1:
     )
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ── Row 1: Placement Distribution + CGPA Histogram
     col_a, col_b = st.columns(2)
 
     with col_a:
@@ -321,15 +304,19 @@ with tab1:
         fig_hist.update_layout(**PLOTLY_LAYOUT)
         st.plotly_chart(fig_hist, use_container_width=True)
 
-    # ── Row 2: Scatter + Internships Box ───────
+    # ── Row 2: Scatter + Box ───────────────────
     col_c, col_d = st.columns(2)
 
     with col_c:
         fig_sc = px.scatter(
-            filtered_df, x="cgpa", y="aptitude_score",
-            color="placement", size="projects",
-            color_discrete_sequence=["#4F8EF7", "#F7724F"],
-            opacity=0.75, title="CGPA vs Aptitude (bubble = Projects)"
+            filtered_df,
+            x="cgpa",
+            y="aptitude_score",
+            color="placement",
+            size="projects",
+            color_discrete_map={"Placed": "#4F8EF7", "Not Placed": "#F7724F"},
+            opacity=0.75,
+            title="CGPA vs Aptitude (bubble = Projects)"
         )
         fig_sc.update_layout(**PLOTLY_LAYOUT)
         st.plotly_chart(fig_sc, use_container_width=True)
@@ -360,7 +347,6 @@ with tab1:
     fig_heat.update_layout(**PLOTLY_LAYOUT, title="Feature Correlation Heatmap", height=380)
     st.plotly_chart(fig_heat, use_container_width=True)
 
-    # ── Insight strip + Download ───────────────
     avg_placed = round(df[df["placement"] == "Placed"]["cgpa"].mean(), 2)
     avg_not    = round(df[df["placement"] == "Not Placed"]["cgpa"].mean(), 2)
 
@@ -393,7 +379,6 @@ with tab2:
     rf_acc  = round(accuracy_score(y_test, model.predict(X_test)) * 100, 2)
     log_acc = round(accuracy_score(y_test, log_model.predict(X_test)) * 100, 2)
 
-    # ── Header KPIs ───────────────────────────
     m1, m2, m3 = st.columns(3)
     m1.metric("🌲 Random Forest Accuracy", f"{rf_acc}%",  delta="Primary model")
     m2.metric("📐 Logistic Regression",    f"{log_acc}%", delta=f"{round(rf_acc - log_acc, 2)}% gap")
@@ -403,7 +388,6 @@ with tab2:
 
     col_e, col_f = st.columns(2)
 
-    # ── Feature Importance ─────────────────────
     with col_e:
         importance    = model.feature_importances_
         imp_df        = pd.DataFrame({"Feature": features, "Importance": importance})
@@ -425,7 +409,6 @@ with tab2:
         fig_imp.update_layout(**PLOTLY_LAYOUT, title="Feature Importance (Random Forest)", height=340)
         st.plotly_chart(fig_imp, use_container_width=True)
 
-    # ── Model Comparison Bar ───────────────────
     with col_f:
         fig_cmp = go.Figure()
         models_names = ["Random Forest", "Logistic Regression"]
@@ -450,7 +433,6 @@ with tab2:
         )
         st.plotly_chart(fig_cmp, use_container_width=True)
 
-    # ── Confusion Matrix ───────────────────────
     st.markdown("#### 🔬 Confusion Matrix — Random Forest")
     cm     = confusion_matrix(y_test, model.predict(X_test))
     labels = ["Not Placed", "Placed"]
@@ -466,7 +448,6 @@ with tab2:
                           xaxis_title="Predicted", yaxis_title="Actual")
     st.plotly_chart(fig_cm, use_container_width=True)
 
-    # ── Classification Report ──────────────────
     with st.expander("📄 Full Classification Report"):
         report = classification_report(y_test, model.predict(X_test),
                                        target_names=["Not Placed", "Placed"])
@@ -491,14 +472,14 @@ with tab3:
 
     with col_l:
         st.markdown("**📐 Academic & Skills**")
-        cgpa         = st.slider("CGPA",               5.0, 10.0, 7.0, 0.1)
-        aptitude     = st.slider("Aptitude Score",      30,  100,  60)
-        communication = st.slider("Communication Skills", 1,  10,   5)
+        cgpa          = st.slider("CGPA",                5.0, 10.0, 7.0, 0.1)
+        aptitude      = st.slider("Aptitude Score",       30,  100,  60)
+        communication = st.slider("Communication Skills", 1,   10,   5)
 
     with col_r:
         st.markdown("**💼 Experience**")
-        internships  = st.slider("Internships",  0, 3, 1)
-        projects     = st.slider("Projects",     1, 5, 2)
+        internships = st.slider("Internships", 0, 3, 1)
+        projects    = st.slider("Projects",    1, 5, 2)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -506,8 +487,8 @@ with tab3:
         input_data = pd.DataFrame([[cgpa, internships, projects, aptitude, communication]],
                                   columns=features)
 
-        prediction  = model.predict(input_data)[0]
-        probability = model.predict_proba(input_data)[0]
+        prediction      = model.predict(input_data)[0]
+        probability     = model.predict_proba(input_data)[0]
         prob_placed     = round(probability[1] * 100, 2)
         prob_not_placed = round(probability[0] * 100, 2)
 
@@ -516,7 +497,7 @@ with tab3:
 
         with res_col:
             if prediction == 1:
-                st.success(f"### 🎉 Likely to be Placed!")
+                st.success("### 🎉 Likely to be Placed!")
                 st.markdown(f"""
                 <div style="background:#0D2218;border:1px solid rgba(0,212,170,0.35);
                             border-radius:14px;padding:1.2rem 1.6rem;margin-top:0.8rem;">
@@ -527,7 +508,7 @@ with tab3:
                 </div>
                 """, unsafe_allow_html=True)
             else:
-                st.error(f"### ⚠️ Low Placement Likelihood")
+                st.error("### ⚠️ Low Placement Likelihood")
                 st.markdown(f"""
                 <div style="background:#1E100A;border:1px solid rgba(247,114,79,0.35);
                             border-radius:14px;padding:1.2rem 1.6rem;margin-top:0.8rem;">
@@ -554,9 +535,9 @@ with tab3:
                     bgcolor="rgba(0,0,0,0)",
                     borderwidth=0,
                     steps=[
-                        dict(range=[0,  40],  color="rgba(247,114,79,0.2)"),
-                        dict(range=[40, 70],  color="rgba(247,200,79,0.2)"),
-                        dict(range=[70, 100], color="rgba(0,212,170,0.2)")
+                        dict(range=[0,  40], color="rgba(247,114,79,0.2)"),
+                        dict(range=[40, 70], color="rgba(247,200,79,0.2)"),
+                        dict(range=[70,100], color="rgba(0,212,170,0.2)")
                     ],
                     threshold=dict(
                         line=dict(color="#00D4AA", width=3),
@@ -573,7 +554,6 @@ with tab3:
             )
             st.plotly_chart(fig_gauge, use_container_width=True)
 
-        # ── Input Summary Card ─────────────────
         st.markdown("#### 📋 Input Summary")
         summary_df = pd.DataFrame({
             "Feature":    ["CGPA", "Internships", "Projects", "Aptitude Score", "Communication"],
