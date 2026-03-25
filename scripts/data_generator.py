@@ -2,13 +2,14 @@ import pandas as pd
 import random
 import sqlite3
 
-# Connect to SQL database
 conn = sqlite3.connect("database/placement.db")
 cursor = conn.cursor()
 
-# Create table if not exists
+# Reset table
+cursor.execute("DROP TABLE IF EXISTS students")
+
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS students (
+CREATE TABLE students (
     student_id INTEGER,
     cgpa REAL,
     internships INTEGER,
@@ -19,8 +20,7 @@ CREATE TABLE IF NOT EXISTS students (
 )
 """)
 
-# Number of records
-n = 50000
+n = 10000
 
 data = []
 
@@ -32,15 +32,10 @@ for i in range(n):
     aptitude_score = random.randint(30, 95)
     communication_skills = random.randint(4, 10)
 
-    # create score for placement decision
     score = cgpa + internships + projects + (aptitude_score / 20) + communication_skills
 
-    if score > 18:
-        placement = "Placed"
-    else:
-        placement = "Not Placed"
+    placement = "Placed" if score > 18 else "Not Placed"
 
-    # add randomness to reduce overfitting
     if random.random() > 0.90:
         placement = "Placed" if placement == "Not Placed" else "Not Placed"
 
@@ -54,12 +49,9 @@ for i in range(n):
         placement
     ))
 
-# Insert data into SQL table
-cursor.executemany("""
-INSERT INTO students VALUES (?,?,?,?,?,?,?)
-""", data)
+cursor.executemany("INSERT INTO students VALUES (?,?,?,?,?,?,?)", data)
 
 conn.commit()
 conn.close()
 
-print("Dataset generated and stored in SQL database successfully!")
+print(" Fresh dataset generated (10000 rows)")
